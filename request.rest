@@ -1,0 +1,11 @@
+POST http://100.100.11.120:8000/api/v1/login
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "admin"
+}
+
+###
+GET http://100.100.11.120:8000/api/v1/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNzQ3Mjk5OTI4fQ.cNQjuch7AIUinzklf5qodlBvqMwhsbaxbA0KXmNLB0U
