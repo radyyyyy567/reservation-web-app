@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MenuItem from './MenuItem';
+import MenuItem from '../MenuItem';
 
 export default function OrderForm() {
   // Initialize state for menu items in categories with default count 0
@@ -78,7 +78,7 @@ export default function OrderForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded">
+    <form onSubmit={handleSubmit} className="">
       {/* Render each category */}
       {Object.entries(menuItems).map(([category, items]) => (
         <div key={category} className="mb-6">

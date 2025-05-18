@@ -1,11 +1,50 @@
-POST http://100.100.11.120:8000/api/v1/login
+POST http://localhost:8000/login
 Content-Type: application/json
 
 {
-    "username": "test",
-    "password": "admin"
+    "email": "email@example.com",
+    "password": "admin1234"
 }
 
 ###
 GET http://100.100.11.120:8000/api/v1/users/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNzQ3Mjk5OTI4fQ.cNQjuch7AIUinzklf5qodlBvqMwhsbaxbA0KXmNLB0U
+
+### Get all orders
+GET http://localhost:8000/api/orders
+Accept: application/json
+
+###
+
+
+
+### Create new order
+POST http://localhost:8000/api/orders
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Rusli Andry",
+  "contact": "082312345678",
+  "total_price": 125000,
+  "type_order": "dine-in",
+  "no_table": "A5",
+  "items": [
+    { "name": "Nasi Goreng", "qty": 2, "price": 25000 },
+    { "name": "Teh Manis", "qty": 2, "price": 5000 }
+  ],
+  "time": "2025-05-18T13:00:00Z",
+  "time_reservation": null
+}
+
+###
+
+### Verify an order (replace :id with actual order ID)
+POST http://localhost:8000/api/orders/1/verify
+Accept: application/json
+
+###
+
+### Delete an order (replace :id with actual order ID)
+DELETE http://localhost:8000/api/orders/1
+Accept: application/json
