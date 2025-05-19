@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const AddUpdate = ({ menu = null, onSuccess, onCancel }) => {
+    console.log(menu === null)
     const [formData, setFormData] = useState({
         name: "",
         price: "",
@@ -83,15 +84,18 @@ const AddUpdate = ({ menu = null, onSuccess, onCancel }) => {
                     className="input input-bordered w-full"
                     required
                 />
-                <input
-                    type="text"
+                <select
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
-                    placeholder="Category"
-                    className="input input-bordered w-full"
+                    className="select select-bordered w-full"
                     required
-                />
+                >
+                    <option value="">Select Category</option>
+                    <option value="food">Food</option>
+                    <option value="drink">Drink</option>
+                    <option value="side">Side</option>
+                </select>
                 <select
                     name="status"
                     value={formData.status}
@@ -112,7 +116,7 @@ const AddUpdate = ({ menu = null, onSuccess, onCancel }) => {
                         accept="image/*"
                     />
                     {menu && !formData?.image && (
-                        <div className="absolute  bg-white truncate pl-2 left-[120px] top-[10px] max-w-xs">{menu.file_original}dddddddddddddddddddd</div>
+                        <div className="absolute  bg-white truncate pl-2 left-[120px] top-[10px] max-w-xs">{menu.file_original}</div>
                     )}
                 </div>
 

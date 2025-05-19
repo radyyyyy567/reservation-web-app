@@ -24,7 +24,7 @@ class OrderController extends Controller
         
         $validated = $request->validate([
             'name' => 'required|string',
-            'contact' => 'required|string',
+            'contact' => 'nullable|string',
             'total_price' => 'required|numeric',
             'type_order' => 'required|in:dine-in,takeaway',
             'no_table' => 'nullable|string',

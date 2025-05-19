@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TableScheduleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,6 +38,9 @@ Route::get('/orders', function () {
     return Inertia::render('Admin/Order');
 })->middleware(['auth', 'verified'])->name('orders');
 
+Route::get('/orders', function () {
+    return Inertia::render('Admin/Order');
+})->middleware(['auth', 'verified'])->name('orders');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,6 +50,10 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/api/menus', [MenuController::class, 'index']);
 Route::get('/api/menus/{menu}', [MenuController::class, 'show']);
+
+Route::get('/api/tables', [TableScheduleController::class, 'index']);
+Route::get('/api/tables/{table}', [TableScheduleController::class, 'show']);
+
 
 Route::middleware('auth')->group(function () {
     Route::post('/api/menus', [MenuController::class, 'store']);

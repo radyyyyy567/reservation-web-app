@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Main from "@/Layouts/LayoutMain";
 import OrderForm from "@/Components/Index/OrderForm";
-import Menu from "@/Components/Index/MenuApplication";
 import MenuApplication from "@/Components/Index/MenuApplication";
 import FoodMenu from "@/Components/Index/FoodMenu";
+import ReservationForm from "@/Components/Index/ReservationForm";
 
 const Index = () => {
     const [order, setOrder] = useState({
@@ -11,15 +11,17 @@ const Index = () => {
         contact: "",
         total_price: 0,
         type_order: "dine-in",
-        no_table: "", // ini tetap ada di object tapi tidak diinput oleh user
+        no_table: "",
         items: [],
         time: new Date().toISOString(),
     });
 
     const [submitted, setSubmitted] = useState(false);
+    const [view, setView] = useState("menu"); // 'menu', 'foodMenu', 'form'
+
+    
 
     const handleSubmit = () => {
-        // Lakukan proses pengiriman data di sini (misalnya ke API)
         console.log("Order submitted:", order);
         setSubmitted(true);
     };
@@ -50,16 +52,67 @@ const Index = () => {
                     </a>
                 </div>
             </nav>
-            <section className="lg:h-screen pt-[80px] pb-[40px] bg-[url('/static/bg-web.jpg')] bg-cover bg-center">
-                <div className="lg:max-w-5xl h-full bg-orange-100 rounded-lg shadow mx-auto">
+
+            <section className=" pt-[80px] pb-[40px] bg-[url('/static/bg-web.jpg')] bg-cover bg-center">
+                <div className="lg:max-w-5xl h-full bg-orange-100 rounded-lg shadow mx-auto p-4">
                     {submitted ? (
                         <div className="text-center text-green-600 mt-10 font-semibold text-lg">
                             Terima kasih! Pesanan Anda telah diterima.
                         </div>
                     ) : (
-                        // <MenuApplication />
-                        <FoodMenu />
-                        // <OrderForm order={order} setOrder={setOrder} onSubmit={handleSubmit} />
+                        <>
+                            {view === "menu" && (
+                                <MenuApplication onSelect={setView} />
+                            )}
+                            {view === "foodMenu" && (
+                                <div>
+                                    <div className="mb-4">
+                                        <button
+                                            onClick={() => setView("menu")}
+                                            className="btn btn-outline"
+                                        >
+                                            ← Back
+                                        </button>
+                                    </div>
+                                    <FoodMenu />
+                                </div>
+                            )}
+
+                            {view === "form" && (
+                                <>
+                                    <div className="mb-4">
+                                        <button
+                                            onClick={() => setView("menu")}
+                                            className="btn btn-outline"
+                                        >
+                                            ← Back
+                                        </button>
+                                    </div>
+                                    <OrderForm
+                                        order={order}
+                                        setOrder={setOrder}
+                                        onSubmit={handleSubmit}
+                                    />
+                                </>
+                            )}
+                            {view === "reservation" && (
+                                <>
+                                    <div className="mb-4">
+                                        <button
+                                            onClick={() => setView("menu")}
+                                            className="btn btn-outline"
+                                        >
+                                            ← Back
+                                        </button>
+                                    </div>
+                                    <ReservationForm
+                                        order={order}
+                                        setOrder={setOrder}
+                                        onSubmit={handleSubmit}
+                                    />
+                                </>
+                            )}
+                        </>
                     )}
                 </div>
             </section>

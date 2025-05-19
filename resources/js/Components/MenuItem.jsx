@@ -9,7 +9,7 @@ const MenuItem = ({ name, image, price, selected = false, count = 0, onAdd, onRe
     >
       <div className="h-[100px] w-full rounded-lg overflow-hidden">
         <img
-          src={`/storage/images/menus/${image}`}
+          src={image}
           alt={name}
           className="w-full h-full object-cover object-center"
         />

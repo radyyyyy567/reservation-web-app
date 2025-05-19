@@ -35,7 +35,7 @@ export default function VerifyOrder({ order, onCancel, onSuccess }) {
                     <h3 className="font-semibold mt-4">Items</h3>
                     <ul className="list-disc pl-6">
                         {order.items.map((item, i) => (
-                            <li key={i}>{item.name} - {item.quantity} pcs</li>
+                            <li key={i}>{item.name} - {item.count} pcs</li>
                         ))}
                     </ul>
                 </div>

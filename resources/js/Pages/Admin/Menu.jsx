@@ -7,7 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 export default function MenuIndex({ auth }) {
     const [menus, setMenus] = useState([]);
-    const [menu, setMenu] = useState({})
+    const [menu, setMenu] = useState(null)
     const [loading, setLoading] = useState(true);
     const [formMode, setFormMode] = useState(false);
 
@@ -26,12 +26,13 @@ export default function MenuIndex({ auth }) {
     const handleFormMode = () => {
         setFormMode(!formMode);
         fetchMenus();
+        console.log(menu)
     };
 
     const onSuccess = (message) => {
         toast.success(message)
         handleFormMode();
-        
+        setMenu(null)
     }
 
     const handleFormModeUpdate = async (id) => {
@@ -46,7 +47,7 @@ export default function MenuIndex({ auth }) {
         axios.delete(`/api/menus/${id}`).then(() => {
             fetchMenus();
         });
-    };
+    };  
 
     return (
         <AuthenticatedLayout

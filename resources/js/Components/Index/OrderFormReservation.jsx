@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MenuItem from "../MenuItem";
 
-export default function OrderForm({ onBack }) {
+export default function OrderForm({ onBack, handleSubmit, handleSetMenuTotal }) {
     const [menuItems, setMenuItems] = useState({ food: [], drink: [] });
-    const [order, setOrder] = useState({
+    const [order, setOrder] = useState({   
         name: "",
         contact: "",
         no_table: "",
@@ -13,8 +13,8 @@ export default function OrderForm({ onBack }) {
         total_price: 0,
         time: new Date().toISOString(), // current timestamp
     });
+    const [orderNumber, setOrderNumber] = useState("")
     const [submitted, setSubmitted] = useState(false);
-    const [orderNumber, setOrderNumber] = useState(null);
     useEffect(() => {
         const fetchMenu = async () => {
             try {
@@ -80,31 +80,31 @@ export default function OrderForm({ onBack }) {
         });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmitOrder = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("/api/orders", order);
-            setOrderNumber(res.data.data.number_order); // Capture the number_order
+            
+            const numberOrder = await handleSubmit(order.items, order.total_price)
+            setOrderNumber(numberOrder);
             setSubmitted(true);
         } catch (err) {
             console.error("Order submission failed:", err);
         }
     };
 
-    if (submitted) {
-        return (
+    
+
+    return (
+        submitted ? (
             <div className="text-center text-green-600 mt-10 font-semibold text-lg">
                 <p>Thank you! Your order has been submitted.</p>
                 <p>
-                    Your Order Number:{" "}
+                    Your Order Number:{""}
                     <span className="font-bold">{orderNumber}</span>
                 </p>
             </div>
-        );
-    }
-
-    return (
-        <form onSubmit={handleSubmit} className="p-4">
+        ) : (
+        <form onSubmit={handleSubmitOrder} className="p-4">
             
 
             {Object.entries(menuItems).map(([category, items]) => (
@@ -142,48 +142,7 @@ export default function OrderForm({ onBack }) {
                 </p>
             </div>
 
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <input
-                    type="text"
-                    placeholder="Name"
-                    value={order.name}
-                    onChange={(e) =>
-                        setOrder((prev) => ({ ...prev, name: e.target.value }))
-                    }
-                    className="border border-gray-300 rounded px-3 py-2 w-full"
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="No Table"
-                    value={order.no_table}
-                    onChange={(e) =>
-                        setOrder((prev) => ({
-                            ...prev,
-                            no_table: e.target.value,
-                        }))
-                    }
-                    className="border border-gray-300 rounded px-3 py-2 w-full"
-                    required
-                />
-
-                <select
-                    value={order.type_order}
-                    onChange={(e) =>
-                        setOrder((prev) => ({
-                            ...prev,
-                            type_order: e.target.value,
-                        }))
-                    }
-                    className="border border-gray-300 rounded px-3 py-2 w-full"
-                    required
-                >
-                    <option value="">Are you Dine In or Take Away?</option>
-                    <option value="dine-in">Dine In</option>
-                    <option value="takeaway">Take Away</option>
-                </select>
-            </div>
-
+            
             <button
                 type="submit"
                 className="mt-6 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
@@ -191,5 +150,5 @@ export default function OrderForm({ onBack }) {
                 Submit Order
             </button>
         </form>
-    );
+    ))
 }
