@@ -8,7 +8,7 @@ export default function ReservationForm({ onBack }) {
         name: "",
         contact: "",
         selected_tables: [],
-        type_order: "dine-in",
+        type_order: "reservation",
         items: [],
         total_price: 0,
         time: new Date().toISOString(),
