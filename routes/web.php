@@ -65,6 +65,8 @@ Route::get('/api/orders', [OrderController::class, 'index']);
 Route::get('/api/orders/{order}', [OrderController::class, 'show']);
 Route::post('/api/orders', [OrderController::class, 'store']);
 
+Route::get('/api/orders/number/{number}', [OrderController::class, 'getByOrderNumber']);
+
 Route::middleware('auth')->group(function () {
     Route::get('/api/orders', [OrderController::class, 'index']);    
     Route::post('/api/orders{id}/verify', [OrderController::class, 'verify']);

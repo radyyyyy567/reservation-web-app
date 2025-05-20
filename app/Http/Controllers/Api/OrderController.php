@@ -21,7 +21,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
 
-        
+
         $validated = $request->validate([
             'name' => 'required|string',
             'contact' => 'nullable|string',
@@ -60,5 +60,16 @@ class OrderController extends Controller
     {
         Order::destroy($id);
         return response()->json(['message' => 'Order deleted.']);
+    }
+
+    public function getByOrderNumber($number)
+    {
+        $order = Order::where('number_order', $number)->first();
+
+        if (!$order) {
+            return response()->json(['message' => 'Order not found.'], 404);
+        }
+
+        return new OrderResource($order);
     }
 }

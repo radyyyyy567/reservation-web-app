@@ -4,6 +4,7 @@ import OrderForm from "@/Components/Index/OrderForm";
 import MenuApplication from "@/Components/Index/MenuApplication";
 import FoodMenu from "@/Components/Index/FoodMenu";
 import ReservationForm from "@/Components/Index/ReservationForm";
+import ViewOrder from "@/Components/Index/ViewOrder";
 
 const Index = () => {
     const [order, setOrder] = useState({
@@ -75,6 +76,20 @@ const Index = () => {
                                         </button>
                                     </div>
                                     <FoodMenu />
+                                </div>
+                            )}
+
+                            {view === "viewOrder" && (
+                                <div>
+                                    <div className="mb-4">
+                                        <button
+                                            onClick={() => setView("menu")}
+                                            className="btn btn-outline"
+                                        >
+                                            ← Back
+                                        </button>
+                                    </div>
+                                    <ViewOrder />
                                 </div>
                             )}
 

@@ -48,7 +48,8 @@ const MenuApplication = ({ onSelect }) => {
                     <span className="text-center font-medium">Reservation</span>
                 </button>
 
-                <button className="shadow card bg-sky-100 relative h-[250px] w-[200px] p-4 flex flex-col items-center justify-start space-y-2">
+                <button onClick={() => onSelect("viewOrder")}
+                 className="shadow card bg-sky-100 relative h-[250px] w-[200px] p-4 flex flex-col items-center justify-start space-y-2">
                     <div className="absolute z-10 flex items-center justify-center h-full w-full">
                         <div className="rounded-full h-28 w-28 bg-sky-300"></div>
                     </div>
@@ -57,7 +58,7 @@ const MenuApplication = ({ onSelect }) => {
                         alt="Takeaway"
                         className="w-full h-full relative z-20"
                     />
-                    <span className="text-center font-medium">Takeaway</span>
+                    <span className="text-center font-medium">See Your Order</span>
                 </button>
             </div>
         </div>
