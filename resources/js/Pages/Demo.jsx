@@ -24,28 +24,28 @@ export default function Demo() {
   // Slider images
   const sliderImages = [
     {
-      src: "/placeholder.svg?height=600&width=1200",
+      src: "https://picsum.photos/1000/1000?random=1",
       alt: "Slide 1",
     },
     {
-      src: "/placeholder.svg?height=600&width=1200",
+      src: "https://picsum.photos/1000/1000?random=2",
       alt: "Slide 2",
     },
     {
-      src: "/placeholder.svg?height=600&width=1200",
+      src: "https://picsum.photos/1000/1000?random=3",
       alt: "Slide 3",
     },
   ]
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950">
+    <div className="flex flex-col min-h-screen bg-white ">
       {/* Navbar - Using Tailwind classes for styling */}
-      <header className="sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-950/60">
+      <header className="sticky top-0 z-50 w-full border-b  border-gray-800 bg-white     ">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center">
             <a href="/" className="flex items-center space-x-2">
-              <ShoppingBag className="h-6 w-6 text-gray-900 dark:text-gray-100" />
-              <span className="font-bold text-xl text-gray-900 dark:text-gray-100">BrandName</span>
+              
+              <img src="/static/logo-reservation.jpeg" className="h-[42px]"/>
             </a>
           </div>
 
@@ -53,25 +53,25 @@ export default function Demo() {
           <nav className="hidden md:flex items-center space-x-6">
             <a
               href="#"
-              className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-teal-bg-teal-500 transition-colors"
             >
               Home
             </a>
             <a
               href="#"
-              className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-teal-bg-teal-500 transition-colors"
             >
               Services
             </a>
             <a
               href="#"
-              className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-teal-bg-teal-500 transition-colors"
             >
               About
             </a>
             <a
               href="#"
-              className="text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-teal-bg-teal-500 transition-colors"
             >
               Contact
             </a>
@@ -79,10 +79,10 @@ export default function Demo() {
 
           {/* Auth Buttons - Using Tailwind for styling */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <button className="px-3 py-1.5 text-sm font-medium text-gray-700  hover:text-gray-200 rounded-md hover:bg-teal-700transition-colors">
               Sign In
             </button>
-            <button className="px-3 py-1.5 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 rounded-md transition-colors">
+            <button className="px-3 py-1.5 text-sm font-medium bg-teal-500 text-white  hover:text-teal-bg-teal-500 hover:bg-gray-200 rounded-md transition-colors">
               Sign Up
             </button>
           </div>
@@ -90,7 +90,7 @@ export default function Demo() {
           {/* Mobile Menu Button - Using Tailwind for styling */}
           <div className="md:hidden">
             <button
-              className="p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-md text-gray-700 hover:text-teal-bg-teal-500 hover:bg-gray-100  transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle Menu"
             >
@@ -101,37 +101,37 @@ export default function Demo() {
 
         {/* Mobile Menu - Using Tailwind for styling and transitions */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 py-4">
+          <div className="md:hidden border-t border-gray-200 border-gray-800 bg-white  py-4">
             <div className="container mx-auto px-4 space-y-4">
               <a
                 href="#"
-                className="block py-2 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                className="block py-2 text-gray-700 hover:text-teal-bg-teal-500"
               >
                 Home
               </a>
               <a
                 href="#"
-                className="block py-2 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                className="block py-2 text-gray-700 hover:text-teal-bg-teal-500"
               >
                 Services
               </a>
               <a
                 href="#"
-                className="block py-2 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                className="block py-2 text-gray-700 hover:text-teal-bg-teal-500"
               >
                 About
               </a>
               <a
                 href="#"
-                className="block py-2 text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
+                className="block py-2 text-gray-700 hover:text-teal-bg-teal-500"
               >
                 Contact
               </a>
               <div className="pt-4 space-y-2">
-                <button className="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                <button className="w-full text-left px-3 py-2 text-sm font-medium text-gray-700  hover:text-gray-200 rounded-md hover:bg-teal-700 transition-colors">
                   Sign In
                 </button>
-                <button className="w-full text-left px-3 py-2 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 rounded-md transition-colors">
+                <button className="w-full text-left px-3 py-2 text-sm font-medium bg-teal-500 text-white  hover:text-teal-bg-teal-500 hover:bg-gray-200  rounded-md transition-colors">
                   Sign Up
                 </button>
               </div>
@@ -147,8 +147,8 @@ export default function Demo() {
             <Swiper
               modules={[Navigation, Pagination, Autoplay]}
               navigation={{
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
+                nextEl: ".swiper-next",
+                prevEl: ".swiper-prev",
               }}
               pagination={{ clickable: true }}
               autoplay={{ delay: 5000 }}
@@ -177,10 +177,10 @@ export default function Demo() {
               ))}
 
               {/* Custom navigation buttons - Using Tailwind for styling */}
-              <div className="swiper-button-prev absolute left-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-800 shadow-md">
-                <ChevronLeft className="h-6 w-6" />
+              <div className="swiper-prev absolute left-4 top-1/2 cursor-pointer z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-800 shadow-md">
+                <ChevronLeft className="text-black"/>
               </div>
-              <div className="swiper-button-next absolute right-4 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-800 shadow-md">
+              <div className="swiper-next absolute right-4 top-1/2 cursor-pointer z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-800 shadow-md">
                 <ChevronRight className="h-6 w-6" />
               </div>
             </Swiper>
@@ -188,91 +188,98 @@ export default function Demo() {
         </section>
 
         {/* Action Buttons Section - Using Tailwind for grid and spacing */}
-        <section className="py-12 px-4 md:py-16 bg-white dark:bg-gray-950">
+        <section className="py-12 px-4 md:py-16 bg-white ">
           <div className="container mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-gray-900 dark:text-gray-100">
-              What would you like to do?
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 text-teal-bg-teal-500 ">
+              Let's we make easy for you
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <div className="flex flex-col items-center text-center">
-                <button className="w-full h-16 text-lg flex items-center justify-center gap-2 bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 rounded-md transition-colors">
-                  <Calendar className="h-5 w-5" />
-                  <span>Reservation</span>
+                <button className="w-full  text-lg  gap-2 bg-teal-500 flex flex-col items-center p-4 font-bold text-white hover:bg-teal-700 rounded-md transition-colors">
+                <img
+                        src="/static/Reservation.svg"
+                        alt="Menu"
+                        className="w-36 h-36 relative z-20"
+                    />
+                  <div>Reservasi</div>
                 </button>
-                <p className="mt-3 text-gray-600 dark:text-gray-400">Book your appointment or table</p>
+                <p className="mt-3 text-gray-600 ">Pesan meja dan waktu makan</p>
               </div>
 
               <div className="flex flex-col items-center text-center">
-                <button className="w-full h-16 text-lg flex items-center justify-center gap-2 bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 rounded-md transition-colors">
-                  <History className="h-5 w-5" />
-                  <span>History Order</span>
+                <button className="w-full  text-lg  gap-2 bg-teal-500 flex flex-col items-center p-4 font-bold text-white hover:bg-teal-700 rounded-md transition-colors">
+                <img
+                        src="/static/Menu.svg"
+                        alt="Menu"
+                        className="w-36 h-36 relative z-20"
+                    />
+                  <div>Riwayat Order</div>
                 </button>
-                <p className="mt-3 text-gray-600 dark:text-gray-400">View your past orders</p>
+                <p className="mt-3 text-gray-600 ">Lihat history order</p>
               </div>
 
               <div className="flex flex-col items-center text-center">
-                <button className="w-full h-16 text-lg flex items-center justify-center gap-2 bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-200 rounded-md transition-colors">
-                  <ShoppingBag className="h-5 w-5" />
-                  <span>See your Order</span>
+                <button className="w-full  text-lg  gap-2 bg-teal-500 flex flex-col items-center p-4 font-bold text-white hover:bg-teal-700 rounded-md transition-colors">
+                <img
+                        src="/static/Takeaway.svg"
+                        alt="Menu"
+                        className="w-36 h-36 relative z-20"
+                    />
+                  <div>Lacak Order</div>
                 </button>
-                <p className="mt-3 text-gray-600 dark:text-gray-400">Track your current orders</p>
+                <p className="mt-3 text-gray-600 ">Lacak order kamu disini</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* Additional Content Section - Using Tailwind for grid and colors */}
-        <section className="py-12 px-4 bg-gray-100 dark:bg-gray-900">
+        <section className="py-12 px-4  bg-teal-500">
           <div className="container mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4 text-gray-200 ">
                   Why Choose Our Service?
                 </h2>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <div className="h-6 w-6 rounded-full bg-gray-900 dark:bg-gray-100 flex items-center justify-center text-white dark:text-gray-900 mt-0.5">
+                    <div className="h-6 w-6 rounded-full bg-teal-500  flex items-center justify-center text-white  mt-0.5">
                       ✓
                     </div>
-                    <span className="text-gray-700 dark:text-gray-300">Easy online reservation system</span>
+                    <span className=" text-gray-100">Easy online reservation system</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <div className="h-6 w-6 rounded-full bg-gray-900 dark:bg-gray-100 flex items-center justify-center text-white dark:text-gray-900 mt-0.5">
+                    <div className="h-6 w-6 rounded-full bg-teal-500  flex items-center justify-center text-white  mt-0.5">
                       ✓
                     </div>
-                    <span className="text-gray-700 dark:text-gray-300">Complete order history at your fingertips</span>
+                    <span className=" text-gray-100">Complete order history at your fingertips</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <div className="h-6 w-6 rounded-full bg-gray-900 dark:bg-gray-100 flex items-center justify-center text-white dark:text-gray-900 mt-0.5">
+                    <div className="h-6 w-6 rounded-full bg-teal-500  flex items-center justify-center text-white  mt-0.5">
                       ✓
                     </div>
-                    <span className="text-gray-700 dark:text-gray-300">Real-time order tracking</span>
+                    <span className=" text-gray-100">Real-time order tracking</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <div className="h-6 w-6 rounded-full bg-gray-900 dark:bg-gray-100 flex items-center justify-center text-white dark:text-gray-900 mt-0.5">
+                    <div className="h-6 w-6 rounded-full bg-teal-500  flex items-center justify-center text-white  mt-0.5">
                       ✓
                     </div>
-                    <span className="text-gray-700 dark:text-gray-300">24/7 customer support</span>
+                    <span className=" text-gray-100">24/7 customer support</span>
                   </li>
                 </ul>
               </div>
               <div className="relative h-64 md:h-80">
-                <img
-                  src="/placeholder.svg?height=400&width=600"
-                  alt="Service features"
-                  className="absolute inset-0 w-full h-full object-cover rounded-lg"
-                  loading="lazy"
-                />
+               
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 py-6">
+      <footer className="bg-white  border-t  border-gray-800 py-6">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-gray-600 ">
             © {new Date().getFullYear()} Our Service. All rights reserved.
           </p>
         </div>
