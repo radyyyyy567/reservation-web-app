@@ -3,25 +3,26 @@ import axios from "axios";
 import clsx from "clsx";
 import OrderFormReservation from "./OrderFormReservation";
 
-export default function ReservationForm({ onBack }) {
+export default function ReservationForm({ user }) {
+    const [step, setStep] = useState(1); // 👈 step 1: enter people
     const [reservation, setReservation] = useState({
-        name: "",
-        contact: "",
+        name: user.name,
+        contact: user.phone,
         selected_tables: [],
         type_order: "reservation",
         items: [],
         total_price: 0,
         time: new Date().toISOString(),
-        time_reservation: "",
+        time: "",
+        date: "",
         people: 0,
     });
 
     const [tables, setTables] = useState([]);
-    const [submitted, setSubmitted] = useState(false);
     const [orderNumber, setOrderNumber] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [reservationMode, setReservationMode] = useState(true)
+    const [reservationMode, setReservationMode] = useState(true);
 
     useEffect(() => {
         const fetchTables = async () => {
@@ -39,35 +40,10 @@ export default function ReservationForm({ onBack }) {
         fetchTables();
     }, []);
 
-    const handleSubmit = async (menu, total) => {
-        try {
-            
-            const payload = {
-                ...reservation,
-                no_table: reservation.selected_tables.join(", "),
-                items: menu,
-                total_price: total
-            };
-            const res = await axios.post("/api/orders", payload);
-            return res.data.data.number_order
-        } catch (err) {
-            console.error("Reservation submission failed:", err);
-            alert("Reservation submission failed. Please try again.");
-        }
-    };
-
-    const handleSetMenuTotal = (menu, total) => {
-        setReservation((prev) => ({
-                            ...prev,
-                            items: menu,
-                            total_price: total
-                        }))
-                                
-    }
-
-    const handleSubmitReservation = () => {
-        setReservationMode(!reservationMode)
-    }
+    const getTotalCapacity = () =>
+        reservation.selected_tables
+            .map((id) => Number(tables.find((t) => t.id === id)?.persons || 0))
+            .reduce((a, b) => a + b, 0);
 
     const toggleTable = (tableId) => {
         setReservation((prev) => {
@@ -79,121 +55,146 @@ export default function ReservationForm({ onBack }) {
         });
     };
 
-   const getTotalCapacity = () => {
-    return reservation.selected_tables
-        .map((id) => {
-            const table = tables.find((t) => t.id === id);
-            // Convert the persons value to a number before returning
-            return table ? Number(table.persons) || 0 : 0;
-        })
-        .reduce((a, b) => a + b, 0); // This will now perform numeric addition
-};
+    const handleSubmit = async (menu, total) => {
+        try {
+            
+            const fullDateTime =
+                reservation.date && reservation.time
+                    ? `${reservation.date} ${reservation.time}:00`
+                    : null;
+            console.log(fullDateTime);
+            const payload = {
+                ...reservation,
+                no_table: reservation.selected_tables.join(", "),
+                items: menu,
+                total_price: total,
+                time_reservation: fullDateTime, // merged datetime string
+            };
+            const res = await axios.post("/api/orders", payload);
+            return res.data.data.number_order;
+        } catch (err) {
+            console.error("Reservation submission failed:", err);
+            alert("Reservation submission failed. Please try again.");
+        }
+    };
 
-    if (submitted) {
+    const handleSetMenuTotal = (menu, total) => {
+        setReservation((prev) => ({
+            ...prev,
+            items: menu,
+            total_price: total,
+        }));
+    };
+
+    const handleNext = () => setStep((prev) => prev + 1);
+    const handleBack = () => setStep((prev) => prev - 1);
+
+    const timeOptions = Array.from({ length: 6 }, (_, i) => {
+        const hourStart = 7 + i * 3;
+        const hourEnd = 9 + i * 3;
+        const hStart = hourStart.toString().padStart(2, "0");
+        const hEnd = hourEnd.toString().padStart(2, "0");
+        return [`${hStart}:00`, `${hStart}:00 - ${hEnd}:00`];
+    });
+
+    if (loading)
+        return <div className="text-center p-4">Loading tables...</div>;
+    if (error)
+        return <div className="text-center p-4 text-red-600">{error}</div>;
+
+    if (!reservationMode) {
         return (
-            <OrderFormReservation 
-                order={reservation} 
-                setOrder={setReservation} 
-                orderNumber={orderNumber} 
+            <OrderFormReservation
+                onBack={() => setReservationMode(true)}
+                handleSubmit={handleSubmit}
+                handleSetMenuTotal={handleSetMenuTotal}
             />
         );
     }
 
-    if (loading) {
-        return <div className="text-center p-4">Loading tables...</div>;
-    }
-
-    if (error) {
-        return <div className="text-center p-4 text-red-600">{error}</div>;
-    }
-
     return (
-        reservationMode ? (
-            <form onSubmit={handleSubmitReservation} className="p-4 max-w-xl mx-auto">
-            <button
-                type="button"
-                onClick={onBack}
-                className="mb-4 bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
-            >
-                ← Back
-            </button>
+        <form
+            className="p-4 max-w-xl mx-auto"
+            onSubmit={(e) => e.preventDefault()}
+        >
+            {step === 1 && (
+                <>
+                    <h2 className="text-2xl font-semibold mb-6">
+                        How many people are you bringing?
+                    </h2>
+                    <input
+                        type="number"
+                        placeholder="Number of people"
+                        value={reservation.people || ""}
+                        onChange={(e) =>
+                            setReservation((prev) => ({
+                                ...prev,
+                                people: Number(e.target.value),
+                                selected_tables: [],
+                            }))
+                        }
+                        className="border border-gray-300 rounded px-3 py-2 w-full"
+                        min={1}
+                        required
+                    />
+                    <input
+                        type="date"
+                        value={reservation.date}
+                        onChange={(e) =>
+                            setReservation((prev) => ({
+                                ...prev,
+                                date: e.target.value,
+                            }))
+                        }
+                        className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                        required
+                    />
 
-            <h2 className="text-2xl font-semibold mb-6">Table Reservation</h2>
+                    <select
+                        value={reservation.time}
+                        onChange={(e) =>
+                            setReservation((prev) => ({
+                                ...prev,
+                                time: e.target.value,
+                            }))
+                        }
+                        className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                        required
+                    >
+                        <option value="">Select Time</option>
+                        {timeOptions.map((time) => (
+                            <option key={time[0]} value={time[0]}>
+                                {time[1]}
+                            </option>
+                        ))}
+                    </select>
+                    <button
+                        type="button"
+                        disabled={!reservation.people}
+                        onClick={handleNext}
+                        className="mt-6 w-full px-6 py-2 rounded bg-blue-500 text-white hover:bg-blue-600"
+                    >
+                        Next
+                    </button>
+                </>
+            )}
 
-            <div className="grid gap-4 mb-6">
-                <input
-                    type="text"
-                    placeholder="Name"
-                    value={reservation.name}
-                    onChange={(e) =>
-                        setReservation((prev) => ({
-                            ...prev,
-                            name: e.target.value,
-                        }))
-                    }
-                    className="border border-gray-300 rounded px-3 py-2"
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="Contact Number"
-                    value={reservation.contact}
-                    onChange={(e) =>
-                        setReservation((prev) => ({
-                            ...prev,
-                            contact: e.target.value,
-                        }))
-                    }
-                    className="border border-gray-300 rounded px-3 py-2"
-                    required
-                />
-                <input
-                    type="number"
-                    placeholder="How many people?"
-                    value={reservation.people}
-                    onChange={(e) =>
-                        setReservation((prev) => ({
-                            ...prev,
-                            people: e.target.value,
-                            selected_tables: [],
-                        }))
-                    }
-                    min={1}
-                    className="border border-gray-300 rounded px-3 py-2"
-                    required
-                />
-                <input
-                    type="datetime-local"
-                    value={reservation.time_reservation}
-                    onChange={(e) =>
-                        setReservation((prev) => ({
-                            ...prev,
-                            time_reservation: e.target.value,
-                        }))
-                    }
-                    className="border border-gray-300 rounded px-3 py-2"
-                    required
-                />
-            </div>
-
-            {reservation.people ? (
-                <div className="mb-6">
-                    <h3 className="text-lg font-medium mb-2">
-                        Choose Your Tables
-                    </h3>
+            {step === 2 && (
+                <>
+                    <h2 className="text-xl font-semibold mb-4">
+                        Select Tables
+                    </h2>
                     <p className="text-sm text-gray-600 mb-2">
                         Select one or more tables (total capacity must be at
                         least {reservation.people}).
                     </p>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4 mb-4">
                         {tables.map((table) => {
                             const selected =
                                 reservation.selected_tables.includes(table.id);
                             const totalCapacity = getTotalCapacity();
                             const maxReached =
-                                totalCapacity >=
-                                parseInt(reservation.people || 0);
-
+                                totalCapacity >= reservation.people;
                             const isDisabled = !selected && maxReached;
 
                             return (
@@ -220,13 +221,11 @@ export default function ReservationForm({ onBack }) {
                             );
                         })}
                     </div>
-
-                    <p className="mt-3 text-sm">
-                        Total capacity selected:{" "}
+                    <p className="text-sm mb-4">
+                        Total selected capacity:{" "}
                         <span
                             className={
-                                getTotalCapacity() >=
-                                reservation.people
+                                getTotalCapacity() >= reservation.people
                                     ? "text-green-600"
                                     : "text-red-600"
                             }
@@ -234,29 +233,81 @@ export default function ReservationForm({ onBack }) {
                             {getTotalCapacity()}
                         </span>
                     </p>
-                </div>
-            ) : ""}
+                    <div className="flex justify-between">
+                        <button
+                            type="button"
+                            onClick={handleBack}
+                            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                        >
+                            Back
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleNext}
+                            disabled={getTotalCapacity() < reservation.people}
+                            className={clsx(
+                                "px-4 py-2 rounded",
+                                getTotalCapacity() >= reservation.people
+                                    ? "bg-blue-500 text-white hover:bg-blue-600"
+                                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            )}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </>
+            )}
 
-            <button
-                type="submit"
-                className={clsx(
-                    "mt-6 px-6 py-2 rounded",
-                    getTotalCapacity() >= parseInt(reservation.people || 0)
-                        ? "bg-blue-500 text-white hover:bg-blue-600"
-                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                )}
-                disabled={
-                    getTotalCapacity() < parseInt(reservation.people || 0)
-                }
-            >
-                Reserve Table
-            </button>
+            {step === 3 && (
+                <>
+                    <h2 className="text-xl font-semibold mb-4">
+                        Enter Your Details
+                    </h2>
+                    <input
+                        type="text"
+                        placeholder="Name"
+                        value={reservation.name}
+                        onChange={(e) =>
+                            setReservation((prev) => ({
+                                ...prev,
+                                name: e.target.value,
+                            }))
+                        }
+                        className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                        required
+                    />
+                    <input
+                        type="text"
+                        placeholder="Contact"
+                        value={reservation.contact}
+                        onChange={(e) =>
+                            setReservation((prev) => ({
+                                ...prev,
+                                contact: e.target.value,
+                            }))
+                        }
+                        className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                        required
+                    />
+
+                    <div className="flex justify-between">
+                        <button
+                            type="button"
+                            onClick={handleBack}
+                            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                        >
+                            Back
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setReservationMode(false)}
+                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        >
+                            Proceed to Menu
+                        </button>
+                    </div>
+                </>
+            )}
         </form>
-        ) : (
-            <OrderFormReservation onBack={handleSubmitReservation} handleSubmit={handleSubmit} handleSetMenuTotal={handleSetMenuTotal}/>
-        )
-
-        
-        
     );
 }

@@ -26,7 +26,7 @@ class OrderController extends Controller
             'name' => 'required|string',
             'contact' => 'nullable|string',
             'total_price' => 'required|numeric',
-            'type_order' => 'required|in:dine-in,takeaway',
+            'type_order' => 'required|string',
             'no_table' => 'nullable|string',
             'items' => 'required|array',
             'time' => 'required|date',
