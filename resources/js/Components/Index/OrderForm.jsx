@@ -6,7 +6,7 @@ export default function OrderForm({ user }) {
     const [menuItems, setMenuItems] = useState({ food: [], drink: [] });
     const [order, setOrder] = useState({
         name: user.name,
-        contact: user.contact,
+        contact: user.phone,
         no_table: "",
         type_order: "take-away",
         items: [],
