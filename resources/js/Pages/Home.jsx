@@ -20,6 +20,8 @@ import "swiper/css/pagination";
 import { ModalProvider, useModal } from "@/Components/Utils/ModalContext";
 import ReservationForm from "@/Components/Index/ReservationForm";
 import { Link } from "@inertiajs/react";
+import OrdersTable from "@/Components/Index/OrderHistory";
+import OrderForm from "@/Components/Index/OrderForm";
 
 function MyForm() {
     return (
@@ -115,7 +117,12 @@ export default function Home({user}) {
                         <Link href='/profile-user' className="inline-block px-3 py-1.5 text-sm font-medium bg-teal-500 text-white  hover:text-teal-bg-teal-500 hover:bg-gray-200 rounded-md transition-colors ml-4">
                         Your Profile
                           
-                        </Link></div> 
+                        </Link>
+                        <Link method="post" href={route('logout')} as="button" className="inline-block px-3 py-1.5 text-sm font-medium bg-red-500 text-white  hover:text-teal-bg-teal-500 hover:bg-gray-200 rounded-md transition-colors ml-4">
+                        Log Out
+                          
+                        </Link>
+                        </div> 
                         }
                         
                     </div>
@@ -236,9 +243,28 @@ export default function Home({user}) {
                             Let's we make easy for you
                         </h2>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
                             <div className="flex flex-col items-center text-center">
-                                <button className="w-full  text-lg  gap-2 bg-teal-500 flex flex-col items-center p-4 font-bold text-white hover:bg-teal-700 rounded-md transition-colors">
+                                <button className="w-full  text-lg  gap-2 bg-teal-500 flex flex-col items-center p-4 font-bold text-white hover:bg-teal-700 rounded-md transition-colors"
+                                onClick={() =>
+                                        openModal(<OrderForm user={user} />)
+                                    }>
+                                    <img
+                                        src="/static/Dinein.svg"
+                                        alt="Menu"
+                                        className="w-36 h-36 relative z-20"
+                                    />
+                                    <div>Take Away</div>
+                                </button>
+                                <p className="mt-3 text-gray-600 ">
+                                    Pesan makanan untuk dibawa pulang
+                                </p>
+                            </div>
+                            <div className="flex flex-col items-center text-center">
+                                <button className="w-full  text-lg  gap-2 bg-teal-500 flex flex-col items-center p-4 font-bold text-white hover:bg-teal-700 rounded-md transition-colors"
+                                onClick={() =>
+                                        openModal(<ReservationForm user={user} />)
+                                    }>
                                     <img
                                         src="/static/Reservation.svg"
                                         alt="Menu"
@@ -252,7 +278,11 @@ export default function Home({user}) {
                             </div>
 
                             <div className="flex flex-col items-center text-center">
-                                <button className="w-full  text-lg  gap-2 bg-teal-500 flex flex-col items-center p-4 font-bold text-white hover:bg-teal-700 rounded-md transition-colors">
+                                <button className="w-full  text-lg  gap-2 bg-teal-500 flex flex-col items-center p-4 font-bold text-white hover:bg-teal-700 rounded-md transition-colors"
+                                  onClick={() =>
+                                        openModal(<OrdersTable user={user} history={true}/>)
+                                    }
+                                >
                                     <img
                                         src="/static/Menu.svg"
                                         alt="Menu"
@@ -268,7 +298,7 @@ export default function Home({user}) {
                             <div className="flex flex-col items-center text-center">
                                 <button
                                     onClick={() =>
-                                        openModal(<ReservationForm user={user} />)
+                                        openModal(<OrdersTable user={user} history={false}/>)
                                     }
                                     className="w-full  text-lg  gap-2 bg-teal-500 flex flex-col items-center p-4 font-bold text-white hover:bg-teal-700 rounded-md transition-colors"
                                 >
@@ -280,7 +310,7 @@ export default function Home({user}) {
                                     <div>Lacak Order</div>
                                 </button>
                                 <p className="mt-3 text-gray-600 ">
-                                    Lacak order kamu disini
+                                    Lihat order kamu disini
                                 </p>
                             </div>
                         </div>

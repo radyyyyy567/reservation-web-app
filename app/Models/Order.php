@@ -9,8 +9,13 @@ class Order extends Model
 {
     protected $fillable = [
         'number_order', 'name', 'contact', 'total_price', 'type_order',
-        'no_table', 'items', 'time', 'time_reservation', 'status'
+        'no_table', 'items', 'time', 'time_reservation', 'status', 'user_id'
     ];
+
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
 
     protected $casts = [
         'items' => 'array',

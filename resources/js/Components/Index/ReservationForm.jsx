@@ -16,8 +16,10 @@ export default function ReservationForm({ user }) {
         total_price: 0,
         time: new Date().toISOString(),
         time_reservation: "",
+        hour_reservation: "07:00",
         date: "",
         people: 0,
+        user_id: user.id
     });
 
     const [tables, setTables] = useState([]);
@@ -25,12 +27,16 @@ export default function ReservationForm({ user }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [reservationMode, setReservationMode] = useState(true);
+    const [reservedTables, setReservedTables] = useState([]);
 
     useEffect(() => {
         const fetchTables = async () => {
             try {
-                const response = await axios.get("/api/tables");
-                setTables(response.data.data);
+                const responseBooked = await axios.get(
+                    `/api/reserved-tables?time=${reservation.date === "" ? "1999-12-12" : reservation.date}T${reservation.hour_reservation}`
+                );
+                console.log(reservation.time)
+                setReservedTables(responseBooked.data.reserved_tables);
                 setLoading(false);
             } catch (err) {
                 console.error("Failed to fetch tables:", err);
@@ -40,25 +46,25 @@ export default function ReservationForm({ user }) {
         };
 
         fetchTables();
-    }, []);
+    }, [reservation]);
 
     const getTotalCapacity = () =>
         reservation.selected_tables
             .map((id) => Number(tables.find((t) => t.id === id)?.persons || 0))
             .reduce((a, b) => a + b, 0);
 
-            const setNoTable = (noTable) => {
-                setReservation((prev) => ({
-                    ...prev,
-                    no_table: noTable,
-                }));
-            };
+    const setNoTable = (noTable) => {
+        setReservation((prev) => ({
+            ...prev,
+            no_table: noTable,
+        }));
+    };
 
     const handleSubmit = async (menu, total) => {
         try {
             const fullDateTime =
-                reservation.date && reservation.time
-                    ? `${reservation.date} ${reservation.time}:00`
+                reservation.date && reservation.hour_reservation
+                    ? `${reservation.date} ${reservation.hour_reservation}:00`
                     : null;
             console.log(fullDateTime);
             const payload = {
@@ -85,6 +91,13 @@ export default function ReservationForm({ user }) {
 
     const handleNext = () => setStep((prev) => prev + 1);
     const handleBack = () => setStep((prev) => prev - 1);
+
+    const clearNoTable = () => {
+  setReservation(prev => ({
+    ...prev,
+    no_table: ''
+  }));
+};
 
     const timeOptions = Array.from({ length: 6 }, (_, i) => {
         const hourStart = 7 + i * 3;
@@ -117,11 +130,12 @@ export default function ReservationForm({ user }) {
             {step === 1 && (
                 <>
                     <h2 className="text-2xl font-semibold mb-6">
-                        How many people are you bringing?
+                        Berapa banyak yang orang yang kamu bawa?
                     </h2>
+                    <div className="space-y-4">
                     <input
                         type="number"
-                        placeholder="Number of people"
+                        placeholder="Jumlah Orang"
                         value={reservation.people || ""}
                         onChange={(e) =>
                             setReservation((prev) => ({
@@ -143,19 +157,19 @@ export default function ReservationForm({ user }) {
                                 date: e.target.value,
                             }))
                         }
-                        className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                        className="border border-gray-300 rounded px-3 py-2 w-full"
                         required
                     />
 
                     <select
-                        value={reservation.time}
+                        value={reservation.hour_reservation}
                         onChange={(e) =>
                             setReservation((prev) => ({
                                 ...prev,
                                 time: e.target.value,
                             }))
                         }
-                        className="border border-gray-300 rounded px-3 py-2 mb-4 w-full"
+                        className="border border-gray-300 rounded px-3 py-2  w-full"
                         required
                     >
                         <option value="">Select Time</option>
@@ -165,6 +179,7 @@ export default function ReservationForm({ user }) {
                             </option>
                         ))}
                     </select>
+                    </div>
                     <button
                         type="button"
                         disabled={!reservation.people}
@@ -182,9 +197,35 @@ export default function ReservationForm({ user }) {
                         Select Tables
                     </h2>
                     <p className="text-sm text-gray-600 mb-2">
-                        Select one or more tables (total capacity must be at
-                        least {reservation.people}).
+                        Pilih Meja yang ingin anda reservasi (Kapasitas anda
+                        pesan {reservation.people}).
                     </p>
+                    <div className="flex flex-col gap-2 text-sm font-medium mb-4">
+                        <div className="flex items-center gap-2">
+                            <div className="w-5 h-5 bg-green-500 border border-black"></div>
+                            <span>B = 7 Orang</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-5 h-5 bg-green-500 border border-black"></div>
+                            <span>BB = 20 Orang</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-5 h-5 bg-red-500 border border-black"></div>
+                            <span>A = 6 Orang</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-5 h-5 bg-white border border-black"></div>
+                            <span>D = 8 Orang</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-5 h-5 bg-yellow-300 border border-black"></div>
+                            <span>C = 8 Orang</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-5 h-5 bg-orange-500"></div>
+                            <span>VIP</span>
+                        </div>
+                    </div>
                     {/* <div className="grid grid-cols-2 gap-4 mb-4">
                         {tables.map((table) => {
                             const selected =
@@ -218,31 +259,33 @@ export default function ReservationForm({ user }) {
                             );
                         })}
                     </div> */}
-                    <div className="relative w-[400px]] h-[800px] overflow-auto">
-                    <div className="absolute top-0 z-[41]">
-                        <TableSVG setNoTable={setNoTable}/>
-                    </div>
+                    <div className="relative min-h-screen overflow-auto">
+                        <div className="absolute top-0 z-[41]">
+                            <TableSVG
+                                reservedTables={reservedTables}
+                                setNoTable={setNoTable}
+                                capacity={reservation.people}
+                            />
+                        </div>
 
-                    <div className="absolute top-0 z-40">
-                        <MapSVG />
-                    </div>
+                        <div className="absolute top-0 z-40">
+                            <MapSVG />
+                        </div>
+                        <div className="relative opacity-0 top-0 z-[39s]">
+                            <MapSVG />
+                        </div>
                     </div>
                     <p className="text-sm mb-4">
-                        Total selected capacity:{" "}
-                        <span
-                            className={
-                                getTotalCapacity() >= reservation.people
-                                    ? "text-green-600"
-                                    : "text-red-600"
-                            }
-                        >
-                            {getTotalCapacity()}
-                        </span>
+                        Meja yang anda pilih:{" "}
+                        <span>{reservation.no_table}</span>
                     </p>
                     <div className="flex justify-between">
                         <button
                             type="button"
-                            onClick={handleBack}
+                            onClick={() => {
+                                handleBack();
+                                clearNoTable();
+                            }}
                             className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
                         >
                             Back
@@ -250,10 +293,10 @@ export default function ReservationForm({ user }) {
                         <button
                             type="button"
                             onClick={handleNext}
-                            disabled={getTotalCapacity() < reservation.people}
+                            disabled={reservation.no_table === ""}
                             className={clsx(
                                 "px-4 py-2 rounded",
-                                getTotalCapacity() >= reservation.people
+                                reservation.no_table
                                     ? "bg-blue-500 text-white hover:bg-blue-600"
                                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                             )}

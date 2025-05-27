@@ -12,7 +12,7 @@ use App\Http\Controllers\{Api\OrderController, MenuController, ProfileController
 
 // Public landing (optional - allow guests)
 Route::get('/', function () {
-    return Inertia::render('Index', [
+    return Inertia::render('Demo', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -20,7 +20,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/demo', fn () => Inertia::render('Demo'))->name('demo');
+
 
 // All routes below require user authentication
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -30,7 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+    Route::get('/api/reserved-tables', [OrderController::class, 'getReservedTables']);
     // User API endpoints
     Route::get('/api/menus', [MenuController::class, 'index']);
     Route::get('/api/menus/{menu}', [MenuController::class, 'show']);
@@ -40,6 +40,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/api/orders/{order}', [OrderController::class, 'show']);
     Route::get('/api/orders/number/{number}', [OrderController::class, 'getByOrderNumber']);
     Route::post('/api/orders', [OrderController::class, 'store']);
+
+    Route::get('/api/orders/user/{id}', [OrderController::class, 'getByUser']);
+    Route::get('/api/order_pending/user/{id}', [OrderController::class, 'getPendingOrder']);
 
     // Admin-only pages and APIs
     Route::middleware('is_admin')->group(function () {
@@ -52,6 +55,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/api/menus/{menu}', [MenuController::class, 'destroy']);
 
         Route::post('/api/orders/{id}/verify', [OrderController::class, 'verify']);
+        Route::post('/api/orders/{id}/cancel', [OrderController::class, 'cancel']);
     });
 });
 

@@ -12,22 +12,31 @@ class OrderResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray($request)
     {
         return [
-            'id'               => $this->id,
-            'number_order'     => $this->number_order,
-            'name'             => $this->name,
-            'contact'          => $this->contact,
-            'type_order'       => $this->type_order,
-            'no_table'         => $this->no_table,
-            'total_price'      => $this->total_price,
-            'status'           => $this->status,
-            'items'            => $this->items,
-            'time'             => $this->time?->toDateTimeString(),
-            'time_reservation' => $this->time_reservation?->toDateTimeString(),
-            'created_at'       => $this->created_at->toDateTimeString(),
-            'updated_at'       => $this->updated_at->toDateTimeString(),
+            'id' => $this->id,
+            'number_order' => $this->number_order,
+            'name' => $this->name,
+            'contact' => $this->contact,
+            'total_price' => $this->total_price,
+            'type_order' => $this->type_order,
+            'no_table' => $this->no_table,
+            'items' => $this->items,
+            'time' => $this->time,
+            'time_reservation' => $this->time_reservation,
+            'status' => $this->status,
+            'created_at' => $this->created_at,
+            
+            // Include user data if available
+            'user' => $this->whenLoaded('user', function () {
+                return [
+                    'id' => $this->user->id,
+                    'name' => $this->user->name,
+                    'email' => $this->user->email,
+                    'contact' => $this->user->contact ?? null, // assuming 'contact' is a field on the User model
+                ];
+            }),
         ];
     }
 }

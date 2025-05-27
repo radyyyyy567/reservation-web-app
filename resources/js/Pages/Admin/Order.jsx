@@ -37,10 +37,10 @@ export default function Order({ auth }) {
     };
 
     const handleDelete = (id) => {
-        if (!confirm("Are you sure you want to delete this order?")) return;
+        if (!confirm("Are you sure you want to cancel this order?")) return;
 
-        axios.delete(`/api/orders/${id}`).then(() => {
-            toast.success("Order deleted");
+        axios.post(`/api/orders/${id}/cancel`).then(() => {
+            toast.success("Order cancelled");
             fetchOrders();
         });
     };
@@ -88,7 +88,7 @@ export default function Order({ auth }) {
                                                 <td>{order.no_table ?? '-'}</td>
                                                 <td>Rp{order.total_price.toLocaleString()}</td>
                                                 <td>
-                                                    <span className={`badge ${order.status === 'verified' ? 'badge-success' : 'badge-warning'}`}>
+                                                    <span className={`badge ${order.status === 'verified' ? 'badge-success' : order.status === "cancelled" ? 'badge-error' : 'badge-warning'}`}>
                                                         {order.status}
                                                     </span>
                                                 </td>
@@ -102,11 +102,12 @@ export default function Order({ auth }) {
                                                             Verify
                                                         </button>
                                                     )}
+                                                    
                                                     <button
                                                         className="btn btn-sm btn-error"
                                                         onClick={() => handleDelete(order.id)}
                                                     >
-                                                        Delete
+                                                        Cancel
                                                     </button>
                                                 </td>
                                             </tr>

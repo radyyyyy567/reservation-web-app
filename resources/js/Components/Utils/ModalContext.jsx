@@ -12,8 +12,8 @@ export function ModalProvider({ children }) {
     <ModalContext.Provider value={{ openModal, closeModal }}>
       {children}
       {content && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-auto">
-          <div className="bg-white p-6 rounded shadow-lg relative max-w-xl w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-auto p-10">
+          <div className="bg-white p-6 rounded shadow-lg relative max-w-4xl w-full max-h-full overflow-auto m-4">
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-black"
               onClick={closeModal}

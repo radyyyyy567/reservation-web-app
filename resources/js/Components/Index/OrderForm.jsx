@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MenuItem from "../MenuItem";
 
-export default function OrderForm({ onBack }) {
+export default function OrderForm({ user }) {
     const [menuItems, setMenuItems] = useState({ food: [], drink: [] });
     const [order, setOrder] = useState({
-        name: "",
-        contact: "",
+        name: user.name,
+        contact: user.contact,
         no_table: "",
-        type_order: "",
+        type_order: "take-away",
         items: [],
         total_price: 0,
         time: new Date().toISOString(), // current timestamp
+        user_id: user.id,
     });
     const [submitted, setSubmitted] = useState(false);
     const [orderNumber, setOrderNumber] = useState(null);
@@ -105,8 +106,6 @@ export default function OrderForm({ onBack }) {
 
     return (
         <form onSubmit={handleSubmit} className="p-4">
-            
-
             {Object.entries(menuItems).map(([category, items]) => (
                 <div key={category} className="mb-6">
                     <h2 className="text-2xl font-semibold capitalize mb-4">
@@ -143,19 +142,7 @@ export default function OrderForm({ onBack }) {
             </div>
 
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <input
-                    type="text"
-                    placeholder="Name"
-                    value={order.name}
-                    onChange={(e) =>
-                        setOrder((prev) => ({ ...prev, name: e.target.value }))
-                    }
-                    className="border border-gray-300 rounded px-3 py-2 w-full"
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="No Table"
+                <select
                     value={order.no_table}
                     onChange={(e) =>
                         setOrder((prev) => ({
@@ -165,22 +152,18 @@ export default function OrderForm({ onBack }) {
                     }
                     className="border border-gray-300 rounded px-3 py-2 w-full"
                     required
-                />
-
-                <select
-                    value={order.type_order}
-                    onChange={(e) =>
-                        setOrder((prev) => ({
-                            ...prev,
-                            type_order: e.target.value,
-                        }))
-                    }
-                    className="border border-gray-300 rounded px-3 py-2 w-full"
-                    required
                 >
-                    <option value="">Are you Dine In or Take Away?</option>
-                    <option value="dine-in">Dine In</option>
-                    <option value="takeaway">Take Away</option>
+                    <option value="">Select no table?</option>
+                    <option value="A1">A1</option>
+                    <option value="B1">B1</option>
+                    <option value="C1">C1</option>
+                    <option value="D1">D1</option>
+                    <option value="E1">E1</option>
+                    <option value="F1">F1</option>
+                    <option value="G1">G1</option>
+                    <option value="H1">H1</option>
+                    <option value="I1">I1</option>
+                    <option value="J1">J1</option>
                 </select>
             </div>
 
