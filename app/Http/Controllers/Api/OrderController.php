@@ -72,4 +72,20 @@ class OrderController extends Controller
 
         return new OrderResource($order);
     }
+
+    public function getReservedTables(Request $request)
+{
+    $validated = $request->validate([
+        'time' => 'required|date',
+    ]);
+
+    // Fetch all orders with a reservation at that time
+    $reserved = Order::whereNotNull('no_table')
+        ->where('time_reservation', $validated['time'])
+        ->pluck('no_table');
+
+    return response()->json([
+        'reserved_tables' => $reserved,
+    ]);
+}
 }

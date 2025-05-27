@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import clsx from "clsx";
 import OrderFormReservation from "./OrderFormReservation";
+import TableSVG from "./TableSVG";
+import MapSVG from "./MapSVG";
 
 export default function ReservationForm({ user }) {
     const [step, setStep] = useState(1); // 👈 step 1: enter people
@@ -13,7 +15,7 @@ export default function ReservationForm({ user }) {
         items: [],
         total_price: 0,
         time: new Date().toISOString(),
-        time: "",
+        time_reservation: "",
         date: "",
         people: 0,
     });
@@ -45,19 +47,15 @@ export default function ReservationForm({ user }) {
             .map((id) => Number(tables.find((t) => t.id === id)?.persons || 0))
             .reduce((a, b) => a + b, 0);
 
-    const toggleTable = (tableId) => {
-        setReservation((prev) => {
-            const isSelected = prev.selected_tables.includes(tableId);
-            const newSelection = isSelected
-                ? prev.selected_tables.filter((id) => id !== tableId)
-                : [...prev.selected_tables, tableId];
-            return { ...prev, selected_tables: newSelection };
-        });
-    };
+            const setNoTable = (noTable) => {
+                setReservation((prev) => ({
+                    ...prev,
+                    no_table: noTable,
+                }));
+            };
 
     const handleSubmit = async (menu, total) => {
         try {
-            
             const fullDateTime =
                 reservation.date && reservation.time
                     ? `${reservation.date} ${reservation.time}:00`
@@ -65,7 +63,6 @@ export default function ReservationForm({ user }) {
             console.log(fullDateTime);
             const payload = {
                 ...reservation,
-                no_table: reservation.selected_tables.join(", "),
                 items: menu,
                 total_price: total,
                 time_reservation: fullDateTime, // merged datetime string
@@ -188,7 +185,7 @@ export default function ReservationForm({ user }) {
                         Select one or more tables (total capacity must be at
                         least {reservation.people}).
                     </p>
-                    <div className="grid grid-cols-2 gap-4 mb-4">
+                    {/* <div className="grid grid-cols-2 gap-4 mb-4">
                         {tables.map((table) => {
                             const selected =
                                 reservation.selected_tables.includes(table.id);
@@ -220,6 +217,15 @@ export default function ReservationForm({ user }) {
                                 </button>
                             );
                         })}
+                    </div> */}
+                    <div className="relative w-[400px]] h-[800px] overflow-auto">
+                    <div className="absolute top-0 z-[41]">
+                        <TableSVG setNoTable={setNoTable}/>
+                    </div>
+
+                    <div className="absolute top-0 z-40">
+                        <MapSVG />
+                    </div>
                     </div>
                     <p className="text-sm mb-4">
                         Total selected capacity:{" "}
